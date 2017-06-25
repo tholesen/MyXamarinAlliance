@@ -13,15 +13,15 @@ namespace XamarinAllianceApp.Controllers
 {
     public class CharacterService
     {
-        private MobileServiceClient Client;
+        public MobileServiceClient Client;
         private IMobileServiceTable<Character> CharacterTable;
 
         public CharacterService()
         {
             Client = new MobileServiceClient(Constants.MobileServiceClientUrl);
-            CharacterTable = Client.GetTable<Character>();
         }
 
+        /*
         /// <summary>
         /// Get the list of characters from an embedded JSON file, including their child entities.
         /// </summary>
@@ -40,6 +40,7 @@ namespace XamarinAllianceApp.Controllers
             var characters = JsonConvert.DeserializeObject<Character[]>(text);
             return characters;
         }
+        */
 
         public async Task<ObservableCollection<Character>> GetCharactersAsync()
         {
@@ -47,6 +48,7 @@ namespace XamarinAllianceApp.Controllers
             //return new ObservableCollection<Character>(characters);
             try
             {
+                CharacterTable = Client.GetTable<Character>();
                 var query = CharacterTable.OrderBy(c => c.Name);
                 var characters = await query.ToListAsync();
 

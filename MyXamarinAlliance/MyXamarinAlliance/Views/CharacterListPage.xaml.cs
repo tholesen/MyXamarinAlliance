@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyXamarinAlliance;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using XamarinAllianceApp.Controllers;
@@ -8,12 +9,13 @@ namespace XamarinAllianceApp.Views
     public partial class CharacterListPage : ContentPage
     {
         private CharacterService service;
+        private bool authenticated;
 
         public CharacterListPage()
         {
             InitializeComponent();
 
-            service = new CharacterService();
+            service = App.CharacterService;
             characterList.ItemSelected += CharacterList_ItemSelected;
         }
 
@@ -36,7 +38,11 @@ namespace XamarinAllianceApp.Views
             base.OnAppearing();
 
             // Set syncItems to true in order to synchronize the data on startup when running in offline mode
-            await RefreshItems(true);
+            if (authenticated)
+            {
+                await RefreshItems(true);
+                LoginButton.IsVisible = false;
+            }
         }
 
         // http://developer.xamarin.com/guides/cross-platform/xamarin-forms/working-with/listview/#pulltorefresh
@@ -110,6 +116,21 @@ namespace XamarinAllianceApp.Views
                 {
                     indicatorDelay.ContinueWith(t => SetIndicatorActivity(false), TaskScheduler.FromCurrentSynchronizationContext());
                 }
+            }
+        }
+
+        private async void Login_Clicked(object sender, EventArgs e)
+        {
+            if (App.Authenticator != null)
+            {
+                authenticated = await App.Authenticator.Authenticate();
+            }
+
+            // Set syncItems to true to synchronize the data on startup when offline is enabled.
+            if (authenticated == true)
+            {
+                await RefreshItems(true);
+                LoginButton.IsVisible = false;
             }
         }
     }
