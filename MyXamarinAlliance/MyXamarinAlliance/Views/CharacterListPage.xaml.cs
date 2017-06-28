@@ -1,4 +1,5 @@
 ﻿using MyXamarinAlliance;
+using MyXamarinAlliance.Views;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -17,6 +18,7 @@ namespace XamarinAllianceApp.Views
 
             service = App.CharacterService;
             characterList.ItemSelected += CharacterList_ItemSelected;
+            ImageDownloadButton.IsVisible = false;
         }
 
         private async void CharacterList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -42,6 +44,7 @@ namespace XamarinAllianceApp.Views
             {
                 await RefreshItems(true);
                 LoginButton.IsVisible = false;
+                ImageDownloadButton.IsVisible = true;
             }
         }
 
@@ -131,7 +134,13 @@ namespace XamarinAllianceApp.Views
             {
                 await RefreshItems(true);
                 LoginButton.IsVisible = false;
+                ImageDownloadButton.IsVisible = true;
             }
+        }
+
+        private async void ImageDownloadButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ImagePage());
         }
     }
 }

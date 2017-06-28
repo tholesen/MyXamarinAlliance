@@ -1,5 +1,8 @@
 ﻿using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
 using MyXamarinAlliance.Controllers;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,14 +22,16 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MyXamarinAlliance.UWP
 {
-    public sealed partial class MainPage : IAuthenticate
+    public sealed partial class MainPage : IAuthenticate, IStreamDownloader
     {
         private MobileServiceUser user;
+
         public MainPage()
         {
             this.InitializeComponent();
             // Initialize the authenticator before loading the app.
             MyXamarinAlliance.App.Init(this);
+            MyXamarinAlliance.App.InitDownloader(this);
             LoadApplication(new MyXamarinAlliance.App());
         }
 
@@ -45,6 +50,8 @@ namespace MyXamarinAlliance.UWP
                     {
                         success = true;
                         message = string.Format("You are now signed-in as {0}.", user.UserId);
+
+                        //var guid = await GetDiplomaGuid();
                     }
                 }
 
@@ -58,6 +65,33 @@ namespace MyXamarinAlliance.UWP
             await new MessageDialog(message, "Sign-in result").ShowAsync();
 
             return success;
+        }
+
+        public async Task<Stream> DownloadStream()
+        {
+            // Get token
+            var token = await MyXamarinAlliance.App.CharacterService.Client.InvokeApiAsync("/api/StorageToken/CreateToken");
+
+            // Get blob client
+            string storageAccountName = "xamarinalliance";
+            StorageCredentials credentials = new StorageCredentials(token.ToString());
+            CloudStorageAccount account = new CloudStorageAccount(credentials, storageAccountName, null, true);
+            var blobClient = account.CreateCloudBlobClient();
+
+            // Download stream
+            var container = blobClient.GetContainerReference("images");
+            var blob = container.GetBlobReference("XAMARIN-Alliance-logo.png");
+
+            MemoryStream stream = new MemoryStream();
+            await blob.DownloadToStreamAsync(stream);
+
+            return stream;
+        }
+
+        private async Task<string> GetDiplomaGuid()
+        {
+            var guid = await MyXamarinAlliance.App.CharacterService.Client.InvokeApiAsync("/api/XamarinAlliance/ReceiveCredit");
+            return guid.ToString();
         }
     }
 }

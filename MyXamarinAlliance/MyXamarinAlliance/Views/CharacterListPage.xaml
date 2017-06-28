@@ -17,6 +17,7 @@
                        x:Name="syncIndicator"/>
     <StackLayout Grid.Row="0" BackgroundColor="#5ABAFF" Padding="10,30,10,5">
       <Button Text="Login" x:Name="LoginButton" Clicked="Login_Clicked"/>
+      <Button Text="Image Download" x:Name="ImageDownloadButton" Clicked="ImageDownloadButton_Clicked"/>
       <Label TextColor="#555555" Text="Xamarin Alliance Members" />
     </StackLayout>
     <ListView x:Name="characterList"

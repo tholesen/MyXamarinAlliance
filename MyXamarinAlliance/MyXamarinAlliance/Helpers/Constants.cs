@@ -14,5 +14,6 @@ namespace XamarinAllianceApp.Helpers
         public static readonly string CharactersFilename = "MyXamarinAlliance.characters.json";
         //public static readonly string MobileServiceClientUrl = "http://xamarinalliancebackend.azurewebsites.net/";
         public static readonly string MobileServiceClientUrl = "https://xamarinalliancesecurebackend.azurewebsites.net/";
+        public static readonly string BlobClientUrl = "https://xamarinalliance.blob.core.windows.net/";
     }
 }

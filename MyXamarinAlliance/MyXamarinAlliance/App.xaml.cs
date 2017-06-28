@@ -13,7 +13,9 @@ namespace MyXamarinAlliance
     public partial class App : Application
     {
         public static IAuthenticate Authenticator { get; private set; }
+        public static IStreamDownloader StreamDownloader { get; private set; }
         public static CharacterService CharacterService { get; private set; }
+
         public App()
         {
             InitializeComponent();
@@ -26,6 +28,11 @@ namespace MyXamarinAlliance
         public static void Init(IAuthenticate authenticator)
         {
             Authenticator = authenticator;
+        }
+
+        public static void InitDownloader(IStreamDownloader streamDownloader)
+        {
+            StreamDownloader = streamDownloader;
         }
 
         protected override void OnStart()
