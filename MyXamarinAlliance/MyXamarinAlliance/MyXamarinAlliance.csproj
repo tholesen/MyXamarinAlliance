@@ -42,10 +42,15 @@
     <Compile Include="Controllers\IAuthenticate.cs" />
     <Compile Include="Controllers\IStreamDownloader.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\Grouping.cs" />
+    <Compile Include="Helpers\ObservableObject.cs" />
+    <Compile Include="Helpers\ObservableRangeCollection.cs" />
     <Compile Include="Models\Character.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\Weapon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\CharacterListViewModel.cs" />
     <Compile Include="Views\CharacterDetailPage.xaml.cs">
       <DependentUpon>CharacterDetailPage.xaml</DependentUpon>
     </Compile>

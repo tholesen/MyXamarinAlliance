@@ -4,24 +4,27 @@ using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using XamarinAllianceApp.Controllers;
+using XamarinAllianceApp.Models;
+using XamarinAllianceApp.ViewModels;
 
 namespace XamarinAllianceApp.Views
 {
     public partial class CharacterListPage : ContentPage
     {
-        private CharacterService service;
+        private CharacterListViewModel viewModel;
+        //private CharacterService service;
         private bool authenticated;
 
         public CharacterListPage()
         {
             InitializeComponent();
+            BindingContext = viewModel = new CharacterListViewModel();
 
-            service = App.CharacterService;
-            characterList.ItemSelected += CharacterList_ItemSelected;
+            //service = App.CharacterService;
             ImageDownloadButton.IsVisible = false;
         }
 
-        private async void CharacterList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var character = e.SelectedItem as Models.Character;
             if (character == null)
@@ -42,12 +45,17 @@ namespace XamarinAllianceApp.Views
             // Set syncItems to true in order to synchronize the data on startup when running in offline mode
             if (authenticated)
             {
-                await RefreshItems(true);
+                //await RefreshItems(true);
+                if (viewModel.Items.Count == 0)
+                {
+                    viewModel.LoadItemsCommand.Execute(null);
+                }
                 LoginButton.IsVisible = false;
                 ImageDownloadButton.IsVisible = true;
             }
         }
 
+        /*
         // http://developer.xamarin.com/guides/cross-platform/xamarin-forms/working-with/listview/#pulltorefresh
         public async void OnRefresh(object sender, EventArgs e)
         {
@@ -84,6 +92,7 @@ namespace XamarinAllianceApp.Views
                 characterList.ItemsSource = await service.GetCharactersAsync();
             }
         }
+        */
 
         private class ActivityIndicatorScope : IDisposable
         {
@@ -132,7 +141,11 @@ namespace XamarinAllianceApp.Views
             // Set syncItems to true to synchronize the data on startup when offline is enabled.
             if (authenticated == true)
             {
-                await RefreshItems(true);
+                //await RefreshItems(true);
+                if (viewModel.Items.Count == 0)
+                {
+                    viewModel.LoadItemsCommand.Execute(null);
+                }
                 LoginButton.IsVisible = false;
                 ImageDownloadButton.IsVisible = true;
             }

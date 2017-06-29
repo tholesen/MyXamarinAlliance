@@ -3,8 +3,16 @@
 				xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 				x:Class="XamarinAllianceApp.Views.CharacterListPage"
 				Title="Xamarin Alliance">
-    
-  <Grid RowSpacing="0">
+
+    <ContentPage.BackgroundImage>
+        <OnPlatform x:TypeArguments="x:String" 
+                    WinPhone="Assets/xa_background.jpg" 
+                    iOS="xa_background.jpg"
+                    Android="Resources/drawable/xa_background.jpg" 
+                    />
+    </ContentPage.BackgroundImage>
+
+    <Grid RowSpacing="0">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
@@ -21,15 +29,30 @@
       <Label TextColor="#555555" Text="Xamarin Alliance Members" />
     </StackLayout>
     <ListView x:Name="characterList"
-				IsPullToRefreshEnabled="true" Refreshing="OnRefresh"
-        HasUnevenRows="true"
-				Grid.Row="1">
+                ItemsSource="{Binding Items}"
+                RefreshCommand="{Binding LoadItemsCommand}"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                ItemSelected="OnItemSelected"
+                IsPullToRefreshEnabled="True"
+                BackgroundColor="Transparent"
+                HasUnevenRows="True"
+                IsGroupingEnabled="True"
+                GroupDisplayBinding="{Binding Key}"
+                Grid.Row="1">
+      <ListView.GroupHeaderTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Key}">
+            <TextCell.TextColor>
+              <OnPlatform x:TypeArguments="Color" iOS="Maroon" Android="Lime" WinPhone="Red" />
+            </TextCell.TextColor>
+          </TextCell>
+        </DataTemplate>
+      </ListView.GroupHeaderTemplate>
       <ListView.ItemTemplate>
         <DataTemplate>
           <ViewCell>
             <StackLayout HorizontalOptions="Start" Orientation="Vertical" Padding="15,5,5,15" >
-                <Label Text="{Binding Name}" FontAttributes="Bold" />
-                <Label Text="{Binding Biography}" />
+              <Label Text="{Binding Name}" FontAttributes="Bold" />
             </StackLayout>
           </ViewCell>
         </DataTemplate>

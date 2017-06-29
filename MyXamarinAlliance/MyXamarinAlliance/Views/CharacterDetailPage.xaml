@@ -5,9 +5,9 @@
              Title="Character Detail Page">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="{Binding Name}" />
-            <Label Text="{Binding Height}" />
-            <Label Text="{Binding Gender}" />
+            <Label Text="{Binding Name}" FontSize="Large" HorizontalTextAlignment="Center"/>
+            <Label Text="{Binding Height}" HorizontalTextAlignment="Center"/>
+            <Label Text="{Binding Gender}" HorizontalTextAlignment="Center"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
